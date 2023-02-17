@@ -1,137 +1,90 @@
+// On récupère la barre de recherche à laquelle on assigne une const
+const input = document.querySelector('#search');
+
 // On déclare ici l'url "global" de l'api 
 let url = 'https://pokeapi.co/api/v2/pokemon';
 
+// On déclare 2 variables, i pour l'offset de la requête et la pour la limit, ces données serviront à afficher les Pokemons 20 par 20
+let i = 1;
+let l = 20;
 
-// On fait une requ^te à l'api afin d'aller chercher la liste de tous les pokemons 
-fetch(url+'?offset=0&limit=10000').then(response => response.json()).then(data => { 
-    // console.log(data);
-    // let results = data.results;
-    // for (pokemon of results){
-    //     console.log(pokemon.name)
-    // }
+// A l'initialisation on appelle la fonction afficherPokemon avec les données initiales de i et l 
+afficherPokemons(i, l);
 
-    let results = data.results;
-    // console.log("🚀 ~ file: script.js:9 ~ fetch ~ results", results)
 
-    // On initialise ici deux variables afin de les utiliser ensuite pour afficher 20 pokemons supplémentaires à la fois 
-    let nombreInit = 0
-    let nombreMax = 20;
 
-    // A l'initialisation on veut voir apparaitre les 20 premiers pokemons de la liste avec leur nom et une image donc on boucle à travers le tableau de Pokemons (results) et on attribue à chaque "result" le nom du Pokemon et sa photo
-    for (let i = nombreInit; i < nombreMax; i++) {
-        // console.log(i)
-        let result = results[i];
-        // console.log('bite', [i])
-        // console.log(result.name)
-        
-        let nom = document.createElement('h5');
-        nom.innerText = result.name; 
-        // console.log("🚀 ~ file: script.js:17 ~ fetch ~ nom", nom);
-        
-        let img = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + [i+1] + ".png";
-        // console.log("🚀 ~ file: script.js:8 ~ fetch ~ img", img)
+function afficherPokemons(i, l) {
 
-        let div = document.createElement('div');
-        div.classList.add('poke-card');
-        document.querySelector('.pokemons').appendChild(div);
-        
-        let image = document.createElement('img');
-        image.src = img ;
-        div.appendChild(image);
-        
-        div.appendChild(nom);
-        
+    // On fait une requ^te à l'api afin d'aller chercher la liste des Pokemons
+    fetch(url + `?offset=${i}&limit=${l}`).then(response => response.json()).then(data => {
 
-        // let infosBouton = document.createElement('button');
-        // infosBouton.classList.add('more');
-        // infosBouton.innerText = 'more';
-        // div.appendChild(infosBouton);
+        let results = data.results;
+        console.log("🚀 ~ file: script.js:12 ~ fetch ~ results", results);
 
-        div.addEventListener('mouseenter', function(){
-            fetch(url+'/'+[i+1]).then(response => response.json()).then(data => {
-                let infos = document.createElement('div');
-                infos.classList.add('infos');
-                div.appendChild(infos);
+        // On map à travers les résultats obtenus par la requête afin de garder les données correspondant à chaque Pokemon, puis on leur crée une card qu'on vient ajouter dans le dom
+        results.map((pokemon) => {
+            let pokemonName = pokemon.name;
 
-                // let closeBouton = document.createElement('button');
-                // closeBouton.classList.add('more');
-                // closeBouton.innerText = 'fermer';
-                // infos.appendChild(closeBouton)
+            // i++ afin de sélectionner l'img correspondant au pokémon ainsi que les données
 
-                console.log('Type : ' + data.types[0].type.name)
-                let type = document.createElement('p');
-                type.innerText = 'Type : ' + data.types[0].type.name;
-                infos.appendChild(type);
+            let nom = document.createElement('h5');
+            nom.innerText = pokemonName;
 
-                // console.log(data.types)
-                let poidsEnKg = Math.round(data.weight / 2.205) + ' kg';
-                console.log('Weight : ' + poidsEnKg);
-                let poids = document.createElement('p');
-                poids.innerText = 'Weight : ' + poidsEnKg;
-                infos.appendChild(poids);
+            let img = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + [i] + ".png";
+            console.log("🚀 ~ file: script.js:41 ~ results.map ~ i", i)
 
-                div.addEventListener('mouseleave', function(){
-                    infos.classList.add('hide');
+            // On crée la div card du Pokemon et on lui ajoute un id qu'on utilisera pour le mouseenter afin de sélectionner le pokemon correspondant
+            let div = document.createElement('div');
+            div.classList.add(`poke-card`);
+            div.setAttribute('id', `${i}`)
+            document.querySelector('.pokemons').appendChild(div);
+
+            let image = document.createElement('img');
+            image.src = img;
+            div.appendChild(image);
+            div.appendChild(nom);
+
+            
+            div.addEventListener('mouseenter', function(){
+                // console.log(i);
+                let i = div.getAttribute('id')
+                console.log("🚀 ~ file: script.js:51 ~ div.addEventListener ~ i", i)
+                fetch(url + '/' + [i]).then(response => response.json()).then(data => {
+                    let infos = document.createElement('div');
+                    infos.classList.add('infos');
+                    div.appendChild(infos);
+                    
+                    console.log('Type : ' + data.types[0].type.name)
+                    let type = document.createElement('p');
+                    type.innerText = 'Type : ' + data.types[0].type.name;
+                    infos.appendChild(type);
+                    
+                    // console.log(data.types)
+                    let poidsEnKg = Math.round(data.weight / 2.205) + ' kg';
+                    console.log('Weight : ' + poidsEnKg);
+                    let poids = document.createElement('p');
+                    poids.innerText = 'Weight : ' + poidsEnKg;
+                    infos.appendChild(poids);
+                    
+                                    div.addEventListener('mouseleave', function(){
+                                        infos.classList.add('hide')
+                                    })
                 })
-            })
+            });
+
+
+            i++;
         })
 
-    }
 
-    let bouton = document.getElementById('bouton');
-    
-    // On intègre ici un bouton qui servira à afficher les 20 pokemons suivants 
-        bouton.addEventListener('click', function(e){
-            // e.preventDefault();
-            nombreInit+=20;
-            nombreMax+=20;
-            for (let i = nombreInit; i < nombreMax; i++) {
-                // console.log(i)
-                let result = results[i];
-                // console.log('bite', [i])
-                // console.log(result.name)
-                
-                let nom = document.createElement('h5');
-                nom.innerText = result.name; 
-                // console.log("🚀 ~ file: script.js:17 ~ fetch ~ nom", nom);
-                
-                let img = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + [i+1] + ".png";
-                // console.log("🚀 ~ file: script.js:8 ~ fetch ~ img", img)
-        
-                let div = document.createElement('div');
-                document.querySelector('.pokemons').appendChild(div);
-        
-                let image = document.createElement('img');
-                image.src = img ;
-                div.appendChild(image);
-                
-                div.appendChild(nom);
-                
-            }
         })
-        // console.log("🚀 ~ file: script.js:18 ~ bouton.addEventListener ~ nombreMax", nombreMax)
+    // });
+}
 
-
-
-
-
-    
-    
-
-    
-    // console.log("🚀 ~ file: script.js:12 ~ fetch ~ image", image);
-
-    // let nom = document.createElement('h5');
-    // nom.innerText = data.name; 
-    // console.log("🚀 ~ file: script.js:16 ~ fetch ~ nom", nom)
-
-    
-    // let pokemon = document.getElementById('pokemon');
-
-    // let div = document.createElement('div');
-    // document.querySelector('.pokemons').appendChild(div);
-    // div.appendChild(nom);
-
-    // console.log("🚀 ~ file: script.js:20 ~ fetch ~ image", image)
-    
-});
+// le bouton nous sert à ajouter 20 pokemons à la liste déjà existante, en rajoutant 20 à la variable de l'offset
+let bouton = document.getElementById('bouton');
+bouton.addEventListener('click', function () {
+    i += 20;
+    console.log(i, l);
+    afficherPokemons(i, l)
+})

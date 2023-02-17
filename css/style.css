@@ -5,29 +5,43 @@
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Open sans", sans-serif;
   background-color: rgb(250, 250, 250);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 button {
   cursor: pointer;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Open sans", sans-serif;
 }
 
 h1 {
   text-align: center;
-  padding: 40px;
+  padding: 32px;
   margin-bottom: 30px;
   text-transform: uppercase;
   background-color: rebeccapurple;
   color: rgb(255, 255, 255);
   box-shadow: 0 0 10px blueviolet;
-  font-size: 2.5rem;
-  font-weight: 400;
 }
 h1 img {
-  width: 80%;
-  max-width: 400px;
+  max-width: 200px;
+}
+
+#search {
+  display: block;
+  margin: 0 auto 30px;
+  padding: 8px 28px;
+  width: 250px;
+  background: none;
+  border: none;
+  border: 2px solid rgb(217, 185, 249);
+  border-radius: 10px;
 }
 
 .pokemons {
@@ -40,13 +54,13 @@ h1 img {
 }
 .pokemons .poke-card {
   background-color: rgb(255, 255, 255);
-  width: 20%;
-  min-width: 220px;
+  width: 15%;
+  min-width: 180px;
   border-radius: 10px;
-  margin: 50px;
+  margin: 20px;
   display: flex;
   flex-direction: column;
-  height: 250px;
+  height: 200px;
   transition: 0.3s;
   position: relative;
   z-index: 0;
@@ -57,10 +71,9 @@ h1 img {
 }
 .pokemons .poke-card h5 {
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 100;
   text-transform: capitalize;
-  word-wrap: break-word;
   background-color: rgb(217, 185, 249);
   padding: 12px 0;
   border-bottom-left-radius: 10px;
@@ -90,10 +103,11 @@ h1 img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 1.6rem;
+  font-size: 1rem;
   font-weight: 200;
   align-items: center;
   position: absolute;
+  line-height: 1.6rem;
   right: 0;
   top: 0;
   z-index: 10;
@@ -102,21 +116,10 @@ h1 img {
   height: 100%;
   overflow: hidden;
   transform: translateX(100%);
-  -webkit-animation: slide 0.8s ease-in-out forwards;
-          animation: slide 0.8s ease-in-out forwards;
+  animation: slide 0.8s ease-in-out forwards;
 }
 .pokemons .poke-card .infos.hide {
-  -webkit-animation: slide-off 0.8s ease-in-out forwards;
-          animation: slide-off 0.8s ease-in-out forwards;
-}
-
-@-webkit-keyframes slide {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(0);
-  }
+  animation: slide-off 0.8s ease-in-out forwards;
 }
 
 @keyframes slide {
@@ -134,19 +137,11 @@ h1 img {
   color: white;
   text-align: center;
   margin-left: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 80px;
+  margin-top: 30px;
   transform: translateX(-50%);
   padding: 10px 16px;
   border-radius: 10px;
-}
-
-@-webkit-keyframes slide-off {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(100%);
-  }
 }
 
 @keyframes slide-off {
